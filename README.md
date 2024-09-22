@@ -78,7 +78,9 @@ You can now run the server locally:
 python manage.py runserver
 ```
 
-Go to http://localhost:8000 to access the app.
+### Go to http://localhost:8000 to access the app.
+### 8. API endpoint:
+Fetch All the details of weather for a particular place: http://127.0.0.1:8000/fetch/
 
 ## Deployment 📦
 To deploy the Django app on Render, follow these steps:
