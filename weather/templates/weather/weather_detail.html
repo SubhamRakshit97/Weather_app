@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Details for {{ city }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ccf9e5;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        background-image: url("../../../img1.avif");
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        font-size: 2.5vw
+      }
+
+      p {
+        font-size: 1.5vw;
+        color: #555;
+        margin: 5px;
+        padding: 0;
+      }
+
+      h2 {
+        color: #d9534f; 
+        font-size: 2.5vw;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        background-color: #ffeeba; /* Light yellow background */
+        border: 1px solid #ffc107; /* Warning color */
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+      }
+
+      a {
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        transition: color 0.3s;
+        text-align: center;
+      }
+
+      a:hover {
+        color: #0056b3; /* Darker blue on hover */
+      }
+      .trends {
+        align-items: center;
+        text-align: center;
+        border: 1px solid black;
+        width: 40%;
+        border-radius: 25px;
+        position: relative;
+        left: 30%;
+        padding-bottom: 1vw;
+      }
+      .trends p{
+        font-size: 1.5vw;
+      }
+      .trends h2{
+        font-size: 1.8vw;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Weather in {{ city }}</h1>
+    <p><strong>Temperature:</strong> {{ temperature }}°C</p>
+    <p><strong>Feels like:</strong> {{ feels_like }}°C</p>
+    <p><strong>Condition:</strong> <i class="{{ icon_class }}"></i> {{ weather_description }}</p>
+    <p><strong>Wind:</strong> {{ wind_speed }} m/s</p>
+    <p><strong>Pressure:</strong> {{ pressure }} hPa</p>
+    <p><strong>Humidity:</strong> {{ humidity }}%</p>
+    <p><strong>Visibility:</strong> {{ visibility }} km</p>
+    {% if alerts %}
+    <h2>Alerts:</h2>
+    <ul>
+      {% for alert in alerts %}
+      <li>{{ alert }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if trends %}
+    <div class="trends">
+      <h2>Weather Trends for the Last 24 Hours</h2>
+      <p>Average Temperature: {{ trends.avg_temperature|floatformat:0 }}°C</p>
+      <p>Average Humidity: {{ trends.avg_humidity|floatformat:0 }}%</p>
+      {% else %}
+      <p>No trend data available for the last 24 hours.</p>
+      {% endif %}
+    </div>
+    <a href="{% url 'weather:weather' %}">Check another city</a>
+  </body>
+</html>
