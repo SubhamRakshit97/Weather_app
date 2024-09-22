@@ -35,7 +35,7 @@ def check_alerts(weather_data):
         temp = weather_data['main']['temp']
         humidity = weather_data['main']['humidity']
         pressure = weather_data['main']['pressure']
-        dew_point = weather_data.get('dew_point', None)  # Some APIs may not include this directly
+        dew_point = weather_data.get('dew_point', None) 
 
         # Temperature alerts
         if temp > 35:
@@ -99,64 +99,7 @@ def get_weather_trends(city):
         }
     return None
 
-# Display weather information and alerts
-# def weather_view(request):
-#     if request.method == "POST":
-#         city = request.POST.get('city')
-#         weather_data = fetch_weather(city)
 
-#         if 'main' in weather_data:
-#             alerts = check_alerts(weather_data)
-#             context = {
-#                 'temperature': weather_data['main']['temp'],
-#                 'humidity': weather_data['main']['humidity'],
-#                 'alerts': alerts,
-#                 'city': city,
-#             }
-#             fetch_weather_and_store(request, city)  # Store data in the DB
-#             return render(request, 'weather/weather_detail.html', context)
-#         else:
-#             error_message = weather_data.get('message', 'Failed to fetch weather data')
-#             return render(request, 'weather/weather_error.html', {'error_message': error_message})
-
-#     return render(request, 'weather/weather_form.html')
-
-# def weather_view(request):
-#     if request.method == "POST":
-#         city = request.POST.get('city')
-#         weather_data = fetch_weather(city)
-
-#         if 'main' in weather_data:
-#             alerts = check_alerts(weather_data)
-#             weather_description = weather_data['weather'][0]['description']
-#             icon_class = weather_icons.get(weather_description.lower(), 'fas fa-question')  # Default to question mark if no match
-#             feels_like = weather_data['main']['feels_like']
-#             wind_speed = weather_data['wind']['speed']
-#             pressure = weather_data['main']['pressure']
-#             humidity = weather_data['main']['humidity']
-#             dew_point = round(weather_data['main']['temp'] - ((100 - humidity) / 5))
-#             visibility = weather_data['visibility'] / 1000  # km
-
-#             context = {
-#                 'temperature': weather_data['main']['temp'],
-#                 'feels_like': feels_like,
-#                 'wind_speed': wind_speed,
-#                 'pressure': pressure,
-#                 'humidity': humidity,
-#                 'dew_point': dew_point,
-#                 'visibility': visibility,
-#                 'weather_description': weather_description.capitalize(),
-#                 'icon_class': icon_class,
-#                 'alerts': alerts,
-#                 'city': city,
-#             }
-#             fetch_weather_and_store(request, city)  # Store data in the DB
-#             return render(request, 'weather/weather_detail.html', context)
-#         else:
-#             error_message = weather_data.get('message', 'Failed to fetch weather data')
-#             return render(request, 'weather/weather_error.html', {'error_message': error_message})
-
-#     return render(request, 'weather/weather_form.html')
 
 def weather_view(request):
     trends = None  # Initialize trends variable
@@ -192,3 +135,13 @@ def weather_view(request):
             return render(request, 'weather/weather_error.html', {'error_message': error_message})
 
     return render(request, 'weather/weather_form.html')
+
+def fetch_weather_data(request):
+    # Query all weather data from the database
+    weather_data = WeatherData.objects.all().values('city', 'temperature', 'humidity', 'timestamp')
+
+    # Convert the QuerySet to a list of dictionaries
+    weather_data_list = list(weather_data)
+
+    # Return the data in JSON format
+    return JsonResponse(weather_data_list, safe=False)
